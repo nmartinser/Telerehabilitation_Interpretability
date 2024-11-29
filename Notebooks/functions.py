@@ -147,9 +147,6 @@ def apply_angles_I(df: pd.DataFrame) -> pd.DataFrame:
         hip_angle_left = calculate_angle(group, 'HipLeft', 'SpineBase', 'KneeLeft')
         knee_angle_left = calculate_angle(group, 'HipLeft', 'KneeLeft', 'AnkleLeft')
         ankle_angle_left = calculate_angle(group, 'KneeLeft', 'AnkleLeft', 'FootLeft')
-        between_knees_angle = calculate_angle(group, 'KneeLeft', 'SpineBase', 'KneeRight')
-        between_ankles_angle = calculate_angle(group, 'AnkleLeft', 'SpineBase', 'AnkleRight')
-        between_foots_angle = calculate_angle(group, 'FootLeft', 'SpineBase', 'FootRight')
         hip_angle_right = calculate_angle(group, 'HipRight', 'SpineBase', 'KneeRight')
         knee_angle_right = calculate_angle(group, 'HipRight', 'KneeRight', 'AnkleRight')
         ankle_angle_right = calculate_angle(group, 'KneeRight', 'AnkleRight', 'FootRight')
@@ -178,9 +175,6 @@ def apply_angles_I(df: pd.DataFrame) -> pd.DataFrame:
             'HipAngleRight': hip_angle_right,
             'KneeAngleRight': knee_angle_right,
             'AnkleAngleRight': ankle_angle_right,
-            'BetweenKneesAngle': between_knees_angle,
-            'BetweenAnkleAngle': between_ankles_angle,
-            'BetweenFootsAngle': between_foots_angle
         })
 
     # Crear un DataFrame a partir de la lista de diccionarios
@@ -188,10 +182,10 @@ def apply_angles_I(df: pd.DataFrame) -> pd.DataFrame:
 
 
 # Cálculos estadísticos sobre los ángulos
-def calculos_estadísticos_I(df:pd.DataFrame) -> pd.DataFrame:
+def calculos_estadísticos(df:pd.DataFrame) -> pd.DataFrame:
     """
     Realiza cálculos estadísticos sobre los ángulos en un
-    DataFrame agrupado por sujeto, gesto y número de repetición (para la fase I).
+    DataFrame agrupado por sujeto, gesto y número de repetición.
 
     Parámetros
     ----------
@@ -282,11 +276,6 @@ def apply_angles_II(df: pd.DataFrame, gesture: str) -> pd.DataFrame:
             left_elbow_vertical_angle = calculate_angle(group, 'SpineBase', 'SpineShoulder', 'ElbowLeft')
             left_shoulder_angle = calculate_angle(group, 'ShoulderLeft', 'SpineShoulder', 'ElbowLeft')
 
-            shoulders_distance = calcular_distancia(group, 'ShoulderLeft', 'ShoulderRight')
-            hips_distance = calcular_distancia(group, 'HipLeft', 'HipRight')
-            foots_distance = calcular_distancia(group, 'FootLeft', 'FootRight')
-            head_distance = calcular_distancia(group, 'SpineShoulder', 'Head')
-
             calculations.append({
                 **additional_data,
                 'LeftArmAngle': left_arm_angle,
@@ -294,11 +283,7 @@ def apply_angles_II(df: pd.DataFrame, gesture: str) -> pd.DataFrame:
                 'LeftWristAngle': left_wrist_angle,
                 'LeftWristVerticalAngle': left_wrist_vertical_angle,
                 'LeftElbowVerticalAngle': left_elbow_vertical_angle,
-                'LeftShoulderAngle': left_shoulder_angle,
-                'ShouldersDistance': shoulders_distance,
-                'HipsDistance': hips_distance,
-                'FootsDistance': foots_distance,
-                'HeadDistance': head_distance
+                'LeftShoulderAngle': left_shoulder_angle
             })
 
     # gestos con brazo derecho
@@ -314,10 +299,6 @@ def apply_angles_II(df: pd.DataFrame, gesture: str) -> pd.DataFrame:
             right_elbow_vertical_angle = calculate_angle(group, 'SpineBase', 'SpineShoulder', 'ElbowRight')
             right_shoulder_angle = calculate_angle(group, 'ShoulderRight', 'SpineShoulder', 'ElbowRight')
 
-            shoulder_distance = calcular_distancia(group, 'ShoulderLeft', 'ShoulderRight')
-            hips_distance = calcular_distancia(group, 'HipLeft', 'HipRight')
-            foots_distance = calcular_distancia(group, 'FootLeft', 'FootRight')
-
             calculations.append({
                 **additional_data,
                 'RightArmAngle': right_arm_angle,
@@ -325,11 +306,7 @@ def apply_angles_II(df: pd.DataFrame, gesture: str) -> pd.DataFrame:
                 'RightWristAngle': right_wrist_angle,
                 'RightWristVerticalAngle': right_wrist_vertical_angle,
                 'RightElbowVerticalAngle': right_elbow_vertical_angle,
-                'RightShoulderAngle': right_shoulder_angle,
-                'ShouldersDistance': shoulder_distance,
-                'HipsDistance': hips_distance,
-                'FootsDistance': foots_distance,
-                'HeadDistance': head_distance
+                'RightShoulderAngle': right_shoulder_angle
             })
     
     # gestos con pierna izquierda
@@ -345,9 +322,6 @@ def apply_angles_II(df: pd.DataFrame, gesture: str) -> pd.DataFrame:
             between_ankles_angle = calculate_angle(group, 'AnkleLeft', 'SpineBase', 'AnkleRight')
             between_foots_angle = calculate_angle(group, 'FootLeft', 'SpineBase', 'FootRight')
 
-            elbows_distance = calcular_distancia(group, 'ShoulderLeft', 'ShoulderRight')
-            head_distance = calcular_distancia(group, 'SpineShoulder', 'Head')
-
             calculations.append({
                 **additional_data,
                 'HipAngleLeft': hip_angle_left,
@@ -356,8 +330,7 @@ def apply_angles_II(df: pd.DataFrame, gesture: str) -> pd.DataFrame:
                 'BetweenKneesAngle': between_knees_angle,
                 'BetweenAnkleAngle': between_ankles_angle,
                 'BetweenFootsAngle': between_foots_angle,
-                'ShouldersDistance': shoulder_distance,
-                'HeadDistance': head_distance
+
             })
     
     # gestos con pierna derecha
@@ -373,9 +346,6 @@ def apply_angles_II(df: pd.DataFrame, gesture: str) -> pd.DataFrame:
             between_ankles_angle = calculate_angle(group, 'AnkleLeft', 'SpineBase', 'AnkleRight')
             between_foots_angle = calculate_angle(group, 'FootLeft', 'SpineBase', 'FootRight')
 
-            shoulder_distance = calcular_distancia(group, 'ShoulderLeft', 'ShoulderRight')
-            head_distance = calcular_distancia(group, 'SpineShoulder', 'Head')
-
             calculations.append({
                 **additional_data,
                 'HipAngleRight': hip_angle_right,
@@ -384,63 +354,10 @@ def apply_angles_II(df: pd.DataFrame, gesture: str) -> pd.DataFrame:
                 'BetweenKneesAngle': between_knees_angle,
                 'BetweenAnkleAngle': between_ankles_angle,
                 'BetweenFootsAngle': between_foots_angle,
-                'ShouldersDistance': shoulder_distance,
-                'HeadDistance': head_distance
             })
 
     # Crear un DataFrame a partir de la lista de diccionarios
     return pd.DataFrame(calculations)
-
-
-
-# Cálculos estadísticos sobre los ángulos
-def calculos_estadísticos_II(df:pd.DataFrame) -> pd.DataFrame:
-    """
-    Realiza cálculos estadísticos sobre los ángulos y distancias en un
-    DataFrame agrupado por sujeto, gesto y número de repetición
-    (para la fase II).
-    """
-
-    # Agrupa el DataFrame 
-    groups = df.groupby(["SubjectID", "RepetitionNumber"])
-
-    # Lista para almacenar los datos de salida
-    data = []
-
-    # Itera sobre cada grupo
-    for (subject_id, repetition_number), group in groups:
-        df_calculations = group.iloc[:, 5:]
-
-        # Separar en ángulos y distancias
-        distance_columns = df_calculations.filter(regex=r'\b.*Distance\b').columns
-        df_angles = df_calculations.drop(columns=distance_columns)
-
-        # Calculos estadísticos
-        means = df_angles.mean()
-
-        data.append({
-            'SubjectID': subject_id,
-            'RepetitionNumber': repetition_number,
-            'CorrectLabel': group['CorrectLabel'].iloc[0],
-            'Duration': len(group),  # Duración en número de frames
-            'standardDeviation': df_calculations.std(),
-            'Maximum': df_angles.max(),
-            'Minimum': df_angles.min(),
-            'Mean': means,
-            'Range': df_angles.max() - df_angles.min(),
-            'Variance': df_angles.var(),
-            'CoV': df_angles.std() / means,  # Coeficiente de variación
-            'Skewness': df_angles.skew(),  # Asimetría
-            'Kurtosis': df_angles.kurtosis()  # Curtosis
-        })
-
-
-    # Convierte la lista de diccionarios en un DataFrame y lo ordena
-    df_stats = pd.DataFrame(data)
-    df_stats['RepetitionNumber'] = pd.to_numeric(df_stats['RepetitionNumber'], errors='coerce')
-    df_stats = df_stats.sort_values(['RepetitionNumber'])
-
-    return df_stats
 
 
 

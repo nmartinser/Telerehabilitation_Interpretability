@@ -26,7 +26,7 @@ if uploaded_files:
 
         df_angles = functions.apply_angles_I(df_data)
 
-        df_stats = functions.calculos_estadísticos_I(df_angles)
+        df_stats = functions.calculos_estadísticos(df_angles)
 
         columnas = ['standardDeviation', 'Maximum', 'Minimum', 'Mean', 'Range',
                     'Variance', 'CoV', 'Skewness', 'Kurtosis']
@@ -81,7 +81,7 @@ if uploaded_files:
 
         df_angles = functions.apply_angles_II(df_data, gesture_short_name)
 
-        df_stats = functions.calculos_estadísticos_II(df_angles)
+        df_stats = functions.calculos_estadísticos(df_angles)
 
         columnas = ['standardDeviation', 'Maximum', 'Minimum', 'Mean', 'Range',
                     'Variance', 'CoV', 'Skewness', 'Kurtosis']
