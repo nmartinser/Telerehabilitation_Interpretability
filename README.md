@@ -21,16 +21,16 @@ pip install -r requirements.txt
 streamlit run app.py
 ```
 
-### Cómo usar la aplicación
-1. Prepara los datos:
+### 🖥️ Cómo usar la aplicación
+**1. Prepara los datos:**
 
-* En la carpeta `dataset` de este repositorio, encontrarás los datos de los videos de un paciente, organizados por gestos.\
-* Cada subcarpeta contiene archivos .txt que corresponden a las repeticiones de un gesto específico.\
+* En la carpeta `dataset` de este repositorio, encontrarás los datos de los videos de un paciente, organizados por gestos.
+* Cada subcarpeta contiene archivos .txt que corresponden a las repeticiones de un gesto específico.
 * Selecciona una de estas subcarpetas para cargar los datos.
 
-2. Carga los datos en la aplicación:
+**2. Carga los datos en la aplicación:**
 
-* Una vez iniciada la aplicación, utiliza el menú desplegable para seleccionar y cargar los datos correspondientes a un movimiento específico.\
+* Una vez iniciada la aplicación, utiliza el menú desplegable para seleccionar y cargar los datos correspondientes a un movimiento específico.
 * La aplicación procesará los datos y mostrará las predicciones realizadas por los algoritmos de aprendizaje automático, incluyendo la clasificación del gesto para identificar el tipo de movimiento realizado por el paciente, el estado de ejecución que evalúa si cada repetición es correcta o incorrecta, y explicaciones para las ejecuciones incorrectas que detallan por qué ciertas repeticiones fueron clasificadas como tales, ayudando al paciente a identificar áreas de mejora en sus gestos.
 
 ## 📁 Descripción del repositorio
@@ -42,25 +42,25 @@ Este subdirectorio contiene los notebooks de Jupyter (.ipynb) utilizados para el
 A continuación se describen los notebooks:
 
 <details>
-<summary>1. Procesar los datos de los videos</summary>
+<summary><span style="font-weight:bold;">1. Procesar los datos de los videos</span></summary>
   
 * **Descripción**: Este notebook procesa archivos de datos de video en formato crudo, extrayendo información esencial sobre cada grabación, como la ID del sujeto, el número de repetición, la precisión del gesto, y la posición de los puntos clave del cuerpo. Seguidamente calcula el ángulo entre disintos puntos del cuepro, y por último se realizan cálculos estadísticos (mínimo, máximo, desviación estándar, media, etc.) sobre los ángulos.  
-* **Salida**: Genera tres archivos CSV:\
-  - `raw_pacientes.csv`: Contiene información detallada sobre cada grabación.\
-  - `angles.csv`: Incluye ángulos calculados entre keypoints.\
+* **Salida**: Genera tres archivos CSV:
+  - `raw_pacientes.csv`: Contiene información detallada sobre cada grabación.
+  - `angles.csv`: Incluye ángulos calculados entre keypoints.
   - `medidasPerRepetition.csv`: contiene una fila por repetición y gesto, que incluye estadísticas para cada ángulo calculado.
 
 </details>
 
-<details><summary>2. Fase 1: Clasificación del movimiento</summary>
+<details><summary><span style="color:blue; font-weight:bold;">2. Fase 1: Clasificación del movimiento</span></summary>
 
 * **Descripción**: Implementa, entrena y evalúa modelos de clasificación para identificar el tipo de gesto realizado por el paciente. 
 * **Salida**: `modelo_fase1_copy.sav` Archivo que guarda el pipeline completo de clasificación entrenado, compuesto por:
-  1. Selección de variables: Utilizando `SelectKBest`.
-  2. Modelo de clasificación: Algoritmo de aprendizaje automático para predecir el tipo de movimiento.
+  - Selección de variables: Utilizando `SelectKBest`.
+  - Modelo de clasificación: Algoritmo de aprendizaje automático para predecir el tipo de movimiento.
 </details>
 
-<details><summary>3. Fase 2: Clasificación de la ejecución del movimiento</summary>
+<details><summary><span style="color:purple; font-weight:bold;">3. Fase 2: Clasificación de la ejecución del movimiento</span></summary>
 
 * **Descripción**: Para cada gesto identificado en la Fase 1, se desarrollan modelos de clasificación específicos para determinar si cada repetición es ejecutada de manera correcta o incorrecta.
 * **Salida**: Nueve archivos `.sav`, uno para cada gesto, que almacenan el pipeline completo de clasificación entrenado, incluyendo tanto el preprocesamiento como el modelo final.
@@ -84,4 +84,4 @@ Aquí se almacenan los archivos intermedios y resultados finales generados duran
  
 * *.gitignore*: listas de archivos y carpetas que deben ser ignorados por el control de versiones.
 
-* *requirements.txt*: ista de dependencias necesarias para la instalación.
+* *requirements.txt*: lista de dependencias necesarias para la instalación.
