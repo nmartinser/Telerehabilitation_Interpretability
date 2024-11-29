@@ -42,7 +42,7 @@ Este subdirectorio contiene los notebooks de Jupyter (.ipynb) utilizados para el
 A continuación se describen los notebooks:
 
 <details>
-<summary><span style="font-weight:bold;">1. Procesar los datos de los videos</span></summary>
+<summary>1. Procesar los datos de los videos</summary>
   
 * **Descripción**: Este notebook procesa archivos de datos de video en formato crudo, extrayendo información esencial sobre cada grabación, como la ID del sujeto, el número de repetición, la precisión del gesto, y la posición de los puntos clave del cuerpo. Seguidamente calcula el ángulo entre disintos puntos del cuepro, y por último se realizan cálculos estadísticos (mínimo, máximo, desviación estándar, media, etc.) sobre los ángulos.  
 * **Salida**: Genera tres archivos CSV:
@@ -52,7 +52,7 @@ A continuación se describen los notebooks:
 
 </details>
 
-<details><summary><span style="color:blue; font-weight:bold;">2. Fase 1: Clasificación del movimiento</span></summary>
+<details><summary>\textcolor{Cerulean}{2. Fase 1: Clasificación del movimiento}</summary>
 
 * **Descripción**: Implementa, entrena y evalúa modelos de clasificación para identificar el tipo de gesto realizado por el paciente. 
 * **Salida**: `modelo_fase1_copy.sav` Archivo que guarda el pipeline completo de clasificación entrenado, compuesto por:
@@ -60,7 +60,7 @@ A continuación se describen los notebooks:
   - Modelo de clasificación: Algoritmo de aprendizaje automático para predecir el tipo de movimiento.
 </details>
 
-<details><summary><span style="color:purple; font-weight:bold;">3. Fase 2: Clasificación de la ejecución del movimiento</span></summary>
+<details><summary>\textcolor{Orchid}3. Fase 2: Clasificación de la ejecución del movimiento</summary>
 
 * **Descripción**: Para cada gesto identificado en la Fase 1, se desarrollan modelos de clasificación específicos para determinar si cada repetición es ejecutada de manera correcta o incorrecta.
 * **Salida**: Nueve archivos `.sav`, uno para cada gesto, que almacenan el pipeline completo de clasificación entrenado, incluyendo tanto el preprocesamiento como el modelo final.
