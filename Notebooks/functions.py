@@ -180,83 +180,6 @@ def apply_angles_I(df: pd.DataFrame) -> pd.DataFrame:
     # Crear un DataFrame a partir de la lista de diccionarios
     return pd.DataFrame(angles)
 
-
-# Cálculos estadísticos sobre los ángulos
-def calculos_estadísticos(df:pd.DataFrame) -> pd.DataFrame:
-    """
-    Realiza cálculos estadísticos sobre los ángulos en un
-    DataFrame agrupado por sujeto, gesto y número de repetición.
-
-    Parámetros
-    ----------
-    df : pd.DataFrame
-        DataFrame que contiene información sobre los ángulos,
-        así como otras columnas relacionadas con el sujeto,
-        gesto, repetición, etc.
-
-    Returns
-    -------
-    pd.DataFrame
-        DataFrame que contiene las estadísticas descriptivas
-        calculadas para cada grupo de ángulos, con una fila por
-        combinación de sujeto, gesto y repetición.
-    """
-
-    # Agrupa el DataFrame 
-    groups = df.groupby(["SubjectID", "RepetitionNumber"])
-
-    # Lista para almacenar los datos de salida
-    data = []
-
-    # Itera sobre cada grupo
-    for (subject_id, repetition_number), group in groups:
-        # Selecciona solo las columnas que contienen los ángulos 
-        angles = group.iloc[:, 3:]
-
-        # Calcula la media y la desviación estándar para los ángulos
-        means = angles.mean()
-        std_devs = angles.std()
-
-        # Almacena las estadísticas en un diccionario 
-        data.append({
-            'SubjectID': subject_id,
-            'RepetitionNumber': repetition_number,
-            'Position': group['Position'].iloc[0],
-            'Duration': len(group),  # Duración en número de frames
-            'standardDeviation': std_devs,
-            'Maximum': angles.max(),
-            'Minimum': angles.min(),
-            'Mean': means,
-            'Range': angles.max() - angles.min(),
-            'Variance': angles.var(),
-            'CoV': std_devs / means,  # Coeficiente de variación
-            'Skewness': angles.skew(),  # Asimetría
-            'Kurtosis': angles.kurtosis()  # Curtosis
-        })
-
-    # Convierte la lista de diccionarios en un DataFrame y lo ordena
-    df_stats = pd.DataFrame(data)
-    df_stats['RepetitionNumber'] = pd.to_numeric(df_stats['RepetitionNumber'], errors='coerce')
-    df_stats = df_stats.sort_values(['RepetitionNumber'])
-
-    return df_stats
-
-def calcular_distancia(df: pd.DataFrame, joint_a: str, joint_b: str):
-    # Extraer posiciones de los keypoints
-    positions = df.set_index('JointName')[['3D_X', '3D_Y', '3D_Z']].loc[[joint_a, joint_b]]
-
-    # Convertir las posiciones a tipo numérico
-    positions = positions.apply(pd.to_numeric)
-
-    # Vector u (joint_a to joint_b) y Vector v (joint_b to joint_c)
-    u = np.array([positions.iloc[1, 0] - positions.iloc[0, 0],
-                  positions.iloc[1, 1] - positions.iloc[0, 1],
-                  positions.iloc[1, 2] - positions.iloc[0, 2]])
-
-    modulo_u = np.linalg.norm(u)
-
-    return modulo_u
-
 def apply_angles_II(df: pd.DataFrame, gesture: str) -> pd.DataFrame:
     '''Aplica la función para caluclar los ángulos a los datos en crudo
     para la fase 1''' 
@@ -359,6 +282,65 @@ def apply_angles_II(df: pd.DataFrame, gesture: str) -> pd.DataFrame:
     # Crear un DataFrame a partir de la lista de diccionarios
     return pd.DataFrame(calculations)
 
+# Cálculos estadísticos sobre los ángulos
+def calculos_estadisticos(df:pd.DataFrame) -> pd.DataFrame:
+    """
+    Realiza cálculos estadísticos sobre los ángulos en un
+    DataFrame agrupado por sujeto, gesto y número de repetición.
+
+    Parámetros
+    ----------
+    df : pd.DataFrame
+        DataFrame que contiene información sobre los ángulos,
+        así como otras columnas relacionadas con el sujeto,
+        gesto, repetición, etc.
+
+    Returns
+    -------
+    pd.DataFrame
+        DataFrame que contiene las estadísticas descriptivas
+        calculadas para cada grupo de ángulos, con una fila por
+        combinación de sujeto, gesto y repetición.
+    """
+
+    # Agrupa el DataFrame 
+    groups = df.groupby(["SubjectID", "RepetitionNumber"])
+
+    # Lista para almacenar los datos de salida
+    data = []
+
+    # Itera sobre cada grupo
+    for (subject_id, repetition_number), group in groups:
+        # Selecciona solo las columnas que contienen los ángulos 
+        angles = group.iloc[:, 3:]
+
+        # Calcula la media y la desviación estándar para los ángulos
+        means = angles.mean()
+        std_devs = angles.std()
+
+        # Almacena las estadísticas en un diccionario 
+        data.append({
+            'SubjectID': subject_id,
+            'RepetitionNumber': repetition_number,
+            'Position': group['Position'].iloc[0],
+            'Duration': len(group),  # Duración en número de frames
+            'standardDeviation': std_devs,
+            'Maximum': angles.max(),
+            'Minimum': angles.min(),
+            'Mean': means,
+            'Range': angles.max() - angles.min(),
+            'Variance': angles.var(),
+            'CoV': std_devs / means,  # Coeficiente de variación
+            'Skewness': angles.skew(),  # Asimetría
+            'Kurtosis': angles.kurtosis()  # Curtosis
+        })
+
+    # Convierte la lista de diccionarios en un DataFrame y lo ordena
+    df_stats = pd.DataFrame(data)
+    df_stats['RepetitionNumber'] = pd.to_numeric(df_stats['RepetitionNumber'], errors='coerce')
+    df_stats = df_stats.sort_values(['RepetitionNumber'])
+
+    return df_stats
 
 
 # Función para formatear columnas que contienen diccionarios
