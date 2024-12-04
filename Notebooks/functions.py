@@ -132,51 +132,44 @@ def apply_angles_I(df: pd.DataFrame) -> pd.DataFrame:
     # Agrupar el DataFrame por cada 25 filas e iterar
     for _, group in df.groupby(np.arange(len(df)) // 25):
         # Calculo de angulos
-        left_arm_angle = calculate_angle(group, 'ShoulderLeft', 'ElbowLeft', 'WristLeft')
-        left_armpit_angle = calculate_angle(group, 'HipLeft', 'ShoulderLeft', 'ElbowLeft')
-        left_wrist_angle = calculate_angle(group, 'ElbowLeft', 'WristLeft', 'HandLeft')
-        left_wrist_vertical_angle = calculate_angle(group, 'SpineBase', 'SpineShoulder', 'WristLeft')
-        left_elbow_vertical_angle = calculate_angle(group, 'SpineBase', 'SpineShoulder', 'ElbowLeft')
-        left_shoulder_angle = calculate_angle(group, 'SpineShoulder', 'ShoulderLeft', 'ElbowLeft')
-        right_arm_angle = calculate_angle(group, 'ShoulderRight', 'ElbowRight', 'WristRight')
-        right_armpit_angle = calculate_angle(group, 'HipRight', 'ShoulderRight', 'ElbowRight')
-        right_wrist_angle = calculate_angle(group, 'ElbowRight', 'WristRight', 'HandRight')
-        right_wrist_vertical_angle = calculate_angle(group, 'SpineBase', 'SpineShoulder', 'WristRight')
-        right_elbow_vertical_angle = calculate_angle(group, 'SpineBase', 'SpineShoulder', 'ElbowRight')
-        right_shoulder_angle = calculate_angle(group, 'SpineShoulder', 'ShoulderRight', 'ElbowRight')
+        elbow_angle_left = calculate_angle(group, 'ShoulderLeft', 'ElbowLeft', 'WristLeft')
+        elbow_angle_right = calculate_angle(group, 'ShoulderRight', 'ElbowRight', 'WristRight')
+        left_arm_angle = calculate_angle(group, 'HipLeft', 'ShoulderLeft', 'ElbowLeft')
+        right_arm_angle = calculate_angle(group, 'HipRight', 'ShoulderRight', 'ElbowRight')
+        arms_together_angle = calculate_angle(group, 'SpineBase', 'SpineShoulder', 'WristLeft')
+        wrist_angle_left = calculate_angle(group, 'ElbowLeft', 'WristLeft', 'HandLeft')
+        shoulder_angle_left = calculate_angle(group, 'ShoulderLeft', 'SpineShoulder', 'ElbowLeft')
+        wrist_angle_right = calculate_angle(group, 'ElbowRight', 'WristRight', 'HandRight')
+        shoulder_angle_right = calculate_angle(group, 'ShoulderRight', 'SpineShoulder', 'ElbowRight')
         hip_angle_left = calculate_angle(group, 'HipLeft', 'SpineBase', 'KneeLeft')
         knee_angle_left = calculate_angle(group, 'HipLeft', 'KneeLeft', 'AnkleLeft')
         ankle_angle_left = calculate_angle(group, 'KneeLeft', 'AnkleLeft', 'FootLeft')
         hip_angle_right = calculate_angle(group, 'HipRight', 'SpineBase', 'KneeRight')
         knee_angle_right = calculate_angle(group, 'HipRight', 'KneeRight', 'AnkleRight')
         ankle_angle_right = calculate_angle(group, 'KneeRight', 'AnkleRight', 'FootRight')
-
-        # Extraer columnas adicionales
+        
+        # # Extraer columnas adicionales
         additional_data = group.iloc[0][['SubjectID', 'GestureLabel', 'GestureName', 'RepetitionNumber', 'CorrectLabel']]
 
         # Almacenar la información en un diccionario
         angles.append({
             **additional_data,
-            'LeftArmAngle': left_arm_angle,
-            'LeftArmpitAngle': left_armpit_angle,
-            'LeftWristAngle': left_wrist_angle,
-            'LeftWristVerticalAngle': left_wrist_vertical_angle,
-            'LeftElbowVerticalAngle': left_elbow_vertical_angle,
-            'LeftShoulderAngle': left_shoulder_angle,
-            'RightArmAngle': right_arm_angle,
-            'RightArmpitAngle': right_armpit_angle,
-            'RightWristAngle': right_wrist_angle,
-            'RightWristVerticalAngle': right_wrist_vertical_angle,
-            'RightElbowVerticalAngle': right_elbow_vertical_angle,
-            'RightShoulderAngle': right_shoulder_angle,
+            'ElbowAngleLeft': elbow_angle_left,
+            'ElbowAngleRight': elbow_angle_right,
+            'ShoulderAngleLeft': shoulder_angle_left,
+            'ShoulderAngleRight': shoulder_angle_right,
+            'WristAngleLeft': wrist_angle_left,
+            'WristAngleRight': wrist_angle_right,
             'HipAngleLeft': hip_angle_left,
             'KneeAngleLeft': knee_angle_left,
             'AnkleAngleLeft': ankle_angle_left,
             'HipAngleRight': hip_angle_right,
             'KneeAngleRight': knee_angle_right,
             'AnkleAngleRight': ankle_angle_right,
+            'LeftArmAngle': left_arm_angle,
+            'RightArmAngle': right_arm_angle,
+            'ArmsTogetherAngle': arms_together_angle
         })
-
     # Crear un DataFrame a partir de la lista de diccionarios
     return pd.DataFrame(angles)
 
@@ -312,7 +305,7 @@ def calculos_estadisticos(df:pd.DataFrame) -> pd.DataFrame:
     # Itera sobre cada grupo
     for (subject_id, repetition_number), group in groups:
         # Selecciona solo las columnas que contienen los ángulos 
-        angles = group.iloc[:, 3:]
+        angles = group.iloc[:, 5:]
 
         # Calcula la media y la desviación estándar para los ángulos
         means = angles.mean()
@@ -322,7 +315,7 @@ def calculos_estadisticos(df:pd.DataFrame) -> pd.DataFrame:
         data.append({
             'SubjectID': subject_id,
             'RepetitionNumber': repetition_number,
-            'Position': group['Position'].iloc[0],
+            'CorrectLabel': group['CorrectLabel'].iloc[0],
             'Duration': len(group),  # Duración en número de frames
             'standardDeviation': std_devs,
             'Maximum': angles.max(),
@@ -337,7 +330,7 @@ def calculos_estadisticos(df:pd.DataFrame) -> pd.DataFrame:
 
     # Convierte la lista de diccionarios en un DataFrame y lo ordena
     df_stats = pd.DataFrame(data)
-    df_stats['RepetitionNumber'] = pd.to_numeric(df_stats['RepetitionNumber'], errors='coerce')
+    df_stats = df_stats.apply(pd.to_numeric, errors='ignore')
     df_stats = df_stats.sort_values(['RepetitionNumber'])
 
     return df_stats
